@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.db import transaction
+from .permissions import IsOwnerOrReadOnly
 from music.models import Song, Album, Artist
 from .models import Comment, LikeSong, DislikeSong
 from rest_framework.views import APIView
@@ -78,16 +79,26 @@ class SongModelViewSet(ModelViewSet):
         return Response(data=serializer.data)
 
     @action(detail=False, methods=['GET'])
-    def top(self, request, *args, **kwargs):
+    def top_listened(self, request, *args, **kwargs):
         songs = self.get_queryset()
         songs = songs.order_by('-listened')[:10]
         serializer = SongSerializer(songs, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['GET'])                               
+    def most_liked(self, request, *args, **kwargs):
+        songs = self.get_queryset()
+        liked_songs = LikeSong.objects.all()
+        
+        liked_song_ids = [x.song.id for x in liked_songs]
+        liked_songs_all = songs.filter(id__in={x for x in liked_song_ids})
+        print(liked_songs_all)
+        serializer = SongSerializer(liked_songs_all, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
         
 class CommentModelViewSet(ModelViewSet):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly,)
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
     http_method_names = ['get', 'post', 'delete', 'patch']
@@ -101,24 +112,6 @@ class CommentModelViewSet(ModelViewSet):
         else:
             pass
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-# class CommentUpdateAPIView(APIView):
-#     authentication_classes = (TokenAuthentication,)
-#     permission_classes = (IsAuthenticated,)
-#     serializer_class = CommentSerializer
-#     queryset = Comment.objects.all()
-#     # http_method_names = ['PATCH', 'PUT']
-
-#     def patch(self, request, pk, format=None):
-#         obj = Comment.objects.get(id=pk)
-#         if self.request.user == obj.author:
-#             serializer = CommentSerializer(obj, data=request.data)
-#             if serializer.is_valid():
-#                 serializer.save()
-#                 return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
 
 
 class LikeSongAPIView(APIView):
@@ -183,8 +176,4 @@ class DislikeSongAPIView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class DislikeSongDetailView(generics.RetrieveAPIView):
-    serializer_class = DislikeSongSerializer
-    def get_queryset(self):
-        return DislikeSong.objects.all()
 

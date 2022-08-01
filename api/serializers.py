@@ -47,3 +47,4 @@ class DislikeSongSerializer(serializers.ModelSerializer):
     class Meta:
         model = DislikeSong
         fields = ['id', 'song']
+
