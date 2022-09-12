@@ -1,0 +1,11 @@
+<h2> <a href="{% url 'index' %}"> Hello world </a> </h2>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+
+<ol>
+    {% for artist in artists %}
+        <li> <h3> {{artist.name}} </h3> </li>
+        <li> <h3> {{artist.picture}} </h3> </li>
+    {% endfor %}
+</ol>
+

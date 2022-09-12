@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from music.models import Artist, Album, Song
+from music.models import Artist, Album, Song, MyPlaylist
 from .models import Comment, LikeSong, DislikeSong
 from rest_framework.exceptions import ValidationError
 
@@ -25,17 +25,17 @@ class SongSerializer(serializers.ModelSerializer):
     # album = AlbumSerializer()
     class Meta:
         model = Song
-        fields = ['id', 'album', 'title', 'cover', 'source', 'listened']
+        fields = ['id', 'audio', 'album', 'title', 'listened']
 
-    def validate_source(self, value):
-        if not value.endswith('.mp3'):
-            raise ValidationError(detail='Mp3 file is required!!!')
-        return value
+    # def validate_source(self, value):
+    #     if not value.endswith('.mp3'):
+    #         raise ValidationError(detail='Mp3 file is required!!!')
+    #     return value
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['id', 'song', 'text']
+        fields = ['id', 'song', 'text', 'replies']
 
     
 class LikeSongSerializer(serializers.ModelSerializer):
@@ -48,3 +48,11 @@ class DislikeSongSerializer(serializers.ModelSerializer):
         model = DislikeSong
         fields = ['id', 'song']
 
+
+class MyPlaylistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyPlaylist
+        fields = '__all__'
+        # exclude = ['author',]
+    
+    

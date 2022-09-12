@@ -1,14 +1,15 @@
 from django.shortcuts import get_object_or_404, render
 from django.db import transaction
+from django.http import JsonResponse
 from .permissions import IsOwnerOrReadOnly
-from music.models import Song, Album, Artist
+from music.models import MyPlaylist, Song, Album, Artist
 from .models import Comment, LikeSong, DislikeSong
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from .serializers import (
-     ArtistSerializer, AlbumSerializer, CommentSerializer, SongSerializer, 
+     ArtistSerializer, AlbumSerializer, CommentSerializer, MyPlaylistSerializer, SongSerializer, 
      LikeSongSerializer, DislikeSongSerializer
 )
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
@@ -20,7 +21,13 @@ from rest_framework import status
 from django.contrib.postgres.search import TrigramSimilarity
 from rest_framework import generics, mixins
 
+from django.http import HttpResponse
+from django.utils.translation import gettext as _
 
+class MyView(APIView):
+    def my_view(get, request):
+        output = _("Welcome to my site.")
+        return Response({"message":output})
 
 class IndexAPIView(APIView):
     authentication_classes = (TokenAuthentication,)
@@ -174,6 +181,18 @@ class DislikeSongAPIView(APIView):
             # if it is alredy disliked, delete dislike
             disliked_song.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+
+class MyPlayListSerializerAPIView(APIView):
+    def get(self, request):
+        serializer = MyPlaylistSerializer(data=MyPlaylist.objects.all())
+        return Response(serializer.data)
+
+def getRoutes(request):
+    routes = [
+        '/api/songs',
+        '/api/comments',
+    ]
+    return JsonResponse(routes, safe=False)
 
 
 

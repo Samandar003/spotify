@@ -1,0 +1,33 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <title>Artist detail</title>
+</head>
+<body>
+    <ul>
+        <li> <h3> Name: {{artist.name}} </h3> </li>
+        <li> <h3> Picture: {{artist.picture}} </h3> </li>
+    </ul>
+
+    <br> <br>
+    <h2> Albums </h2>
+    <ul>
+        {% for album in albums %}
+            <li> <a href="{% url 'album_detail' album.id %}"> {{album.title}} </a> </li>
+        {% endfor %}
+    </ul>
+
+    <br> <br>
+    <ol>
+    {% if song_num == 0 or song_num == 1 %}
+    <h2> {{song_num}} song </h2>
+    {% else %}
+    <h2> {{song_num}} songs </h2>
+    {% endif %}
+    </ol>
+</body>
+</html>

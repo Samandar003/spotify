@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <h2> <a href="{% url 'index' %}"> Hello world </a> </h2>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+
+</head>
+<body>
+    <ul>
+        <li> <h3> <a href="{% url 'artist_detail' album.artist.id %}"> Artist: {{album.artist}} </a> </h3> </li> 
+        <li> <h3> Title: {{album.title}} </h3> </li> 
+        <li> <h3> Cover: {{album.cover}} </h3> </li> 
+    </ul>
+
+    <br> <br>
+     
+    <h2>Songs</h2>
+    <ol>
+        {% for song in songs %}
+            <li> <h3>  <a href="{% url 'song_detail' song.id %}"> {{song.title}} </a> </h3> </li>
+        {% endfor %}
+    </ol>
+
+</body>
+</html>

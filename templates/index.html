@@ -1,1 +1,15 @@
-<h2> Hello world </h2>
+<h2> <a href="{% url 'index' %}"> Hello world </a> </h2>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+
+<form method="GET" style="margin-top: 20px; display: flex;">
+    <input type="text" value="{{search_input}}" name="search_area">
+    <input class="button" type="submit" value="Search">
+</form>  
+
+<ol>
+    {% for song in songs %}
+    <h3> <li> <a href="{% url 'song_detail' song.pk %}"> {{song.title}} </a> </li> </h3>
+    {% endfor %}
+</ol>
+

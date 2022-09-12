@@ -3,10 +3,11 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 from django.contrib.auth import get_user_model
 User = get_user_model()
+import os
 
 class Artist(models.Model):
     name = models.CharField(max_length=150)
-    picture = models.URLField(blank=True)
+    picture = models.ImageField(blank=True, upload_to='media/artist_pictures')
 
     def __str__(self):
         return self.name
@@ -28,10 +29,10 @@ class Album(models.Model):
         verbose_name_plural = _('albums')
 
 class Song(models.Model):
+    audio = models.FileField(upload_to='media/audios')
     album = models.ForeignKey('Album', on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=500)
-    cover = models.URLField(blank=True)
-    source = models.URLField(blank=False, null=False)
+    # cover = models.URLField(blank=True)
     listened = models.PositiveIntegerField(default=0)
 
     class Meta:
@@ -40,7 +41,14 @@ class Song(models.Model):
 
     def __str__(self):
         return self.title
-
+    
+class MyPlaylist(models.Model):
+    name = models.CharField(max_length=500)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    musics = models.ManyToManyField(Song, related_name='musics')
+    
+    def __str__(self):
+        return self.name
 
 # class LikeSong(models.Model):
 #     song = models.ForeignKey(Song, on_delete=models.CASCADE)

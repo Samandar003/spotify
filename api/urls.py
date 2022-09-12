@@ -7,7 +7,8 @@ from .views import (
      ArtistModelViewSet, IndexAPIView, AlbumModelViewSet,
       SongModelViewSet, CommentModelViewSet,
       LikeSongAPIView,
-      DislikeSongAPIView
+      DislikeSongAPIView,
+      MyView
 )
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
@@ -21,7 +22,8 @@ router.register('comments', CommentModelViewSet, basename='comment'),
 
 
 urlpatterns = [
-    path('', IndexAPIView.as_view(), name='index'),
+    path('', IndexAPIView.as_view(), name='api'),
+    path('myview', MyView.as_view(), name='myview'),
     path('token-auth/', views.obtain_auth_token),
     path('dislikesongs/', DislikeSongAPIView.as_view(), name='dislikesong'),
     path('dislikesongs/<str:pk>/', RetrieveAPIView.as_view(queryset=DislikeSong.objects.all(), serializer_class=DislikeSongSerializer), name='dislikesong-detail'),
