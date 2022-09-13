@@ -190,7 +190,15 @@ class MyPlayListSerializerAPIView(APIView):
 def getRoutes(request):
     routes = [
         '/api/songs',
+        '/api/albums',
+        '/api/artists',
         '/api/comments',
+        '/api/token-auth/',
+        '/api/dislikesongs',
+        '/api/dislikesongs/<str:pk>/',
+        '/api/likesongs',
+        '/api/likesongs/<str:pk>/',
+        
     ]
     return JsonResponse(routes, safe=False)
 
