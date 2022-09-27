@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
 from django.core.validators import RegexValidator
 User = get_user_model()
-from .models import Comment, Artist, Profile, Song, MyArtist, MyPlaylist, FollowersCount
+from .models import Comment, Artist, Profile, Song, MyArtist, MyPlaylist
 from rest_framework.exceptions import ValidationError
 
 class UserSerializer(serializers.ModelSerializer):
@@ -83,8 +83,6 @@ class MyPlaylistSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyPlaylist
         fields = '__all__'
-    
-    
 
 from django.contrib.auth import get_user_model
 User = get_user_model()

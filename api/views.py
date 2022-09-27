@@ -31,25 +31,6 @@ from django.contrib.auth.models import User
 
 from api import serializers
 
-class UserRegisterView(APIView):
-    serializer_class = UserSerializer
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        print(serializer.data)
-        return Response(serializer.data)
-
-class SessionUserView(APIView):
-    def get(self, request):
-        user = User.objects.get(pk=self.request.user.id)
-        serializer = UserOutSerializer(user)
-        return Response(data=serializer.data)
-
-class MyView(APIView):
-    def my_view(get, request):
-        output = _("Welcome to my site.")
-        return Response({"message":output})
 
 class ProfileModelViewSet(ModelViewSet):
     authentication_classes = (TokenAuthentication,)
@@ -92,27 +73,21 @@ class HomePageViewSet(ViewSet):
     permission_classes = (IsAuthenticated,)
     def list(self, request):
         songs = Song.objects.all()
-        artists = Artist.objects.all().order_by('followers')
-        songs = songs.order_by('likes')
+        songs = songs.order_by('listened')
         serializer = SongSerializer(songs, many=True)
         return Response(serializer.data)
     def retrieve(self, request, pk):
-        artist = Artist.objects.filter(id=pk).first()
-        songs = Song.objects.filter(artist__name=artist)
-        serializer = SongSerializer(songs, many=True)
+        song = Song.objects.filter(id=pk).first()
+        serializer = SongSerializer(song)
         return Response(serializer.data)
-    
-class FollowersCountView(ViewSet):
-    def list(self, request):
-        followers = FollowersCount.objects.filter(follower=self.request.user)
-        followings = FollowersCount.objects.filter(author=self.request.user)
-        return Response({"ms":"Hello"})
 
 class LikedOnesViewSet(ViewSet):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
     def list(self, request):
-        songs = Song.objects.all().order_by('likes')
-        for n in songs:
-            song = n.likes.filter(user=self.request.user)
+        songs = Song.objects.all()
+        ids = [n.id for n in songs for m in n.likes.all() if m == self.request.user]
+        songs = songs.filter(id__in=ids)
         serializer = SongSerializer(songs, many=True)
         return Response(serializer.data)
 

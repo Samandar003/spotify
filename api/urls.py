@@ -3,8 +3,9 @@ from rest_framework.generics import RetrieveAPIView
 from .views import (
      ArtistModelViewSet, HomepageAPIView,
       SongModelViewSet, CommentModelViewSet, HomePageViewSet, LikedOnesViewSet,
-      MyView, FollowersCountView, ProfileModelViewSet, SessionUserView, UserRegisterView
+    ProfileModelViewSet
 )
+from .auth_views import MyView, SessionUserView, UserRegisterView
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 
@@ -15,7 +16,6 @@ router.register('songs', SongModelViewSet, basename='song')
 router.register('albums', HomePageViewSet, basename='album')
 router.register('comments', CommentModelViewSet, basename='comment')
 router.register('likedones', LikedOnesViewSet, basename='likedones')
-router.register('followerscount', FollowersCountView, basename='followerscount')
 
 urlpatterns = [
     path('', HomepageAPIView.as_view(), name='api'),
