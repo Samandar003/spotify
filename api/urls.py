@@ -1,34 +1,28 @@
 from django.urls import path, include
 from rest_framework.generics import RetrieveAPIView
-from .serializers import LikeSongSerializer, DislikeSongSerializer
-from .models import LikeSong, DislikeSong
-
 from .views import (
-     ArtistModelViewSet, IndexAPIView, AlbumModelViewSet,
-      SongModelViewSet, CommentModelViewSet,
-      LikeSongAPIView,
-      DislikeSongAPIView,
-      MyView
+     ArtistModelViewSet, HomepageAPIView,
+      SongModelViewSet, CommentModelViewSet, HomePageViewSet, LikedOnesViewSet,
+      MyView, FollowersCountView, ProfileModelViewSet, SessionUserView, UserRegisterView
 )
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 
 
 router = DefaultRouter()
-router.register('artists', ArtistModelViewSet, basename='artist')
-router.register('albums', AlbumModelViewSet, basename='album')
+router.register('profiles', ProfileModelViewSet, basename='profile')
 router.register('songs', SongModelViewSet, basename='song')
-router.register('comments', CommentModelViewSet, basename='comment'),
-
+router.register('albums', HomePageViewSet, basename='album')
+router.register('comments', CommentModelViewSet, basename='comment')
+router.register('likedones', LikedOnesViewSet, basename='likedones')
+router.register('followerscount', FollowersCountView, basename='followerscount')
 
 urlpatterns = [
-    path('', IndexAPIView.as_view(), name='api'),
+    path('', HomepageAPIView.as_view(), name='api'),
     path('myview', MyView.as_view(), name='myview'),
     path('token-auth/', views.obtain_auth_token),
-    path('dislikesongs/', DislikeSongAPIView.as_view(), name='dislikesong'),
-    path('dislikesongs/<str:pk>/', RetrieveAPIView.as_view(queryset=DislikeSong.objects.all(), serializer_class=DislikeSongSerializer), name='dislikesong-detail'),
-    path('likesongs/', LikeSongAPIView.as_view(), name='likesong'),
-    path('likesongs/<str:pk>/', RetrieveAPIView.as_view(queryset=LikeSong.objects.all(), serializer_class=LikeSongSerializer), name='likesong-detail'),
+    path('session/', SessionUserView.as_view()),
+    path('register/', UserRegisterView.as_view()),
 ]
 
 urlpatterns += router.urls
