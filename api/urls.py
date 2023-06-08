@@ -16,6 +16,8 @@ router.register('songs', SongModelViewSet, basename='song')
 router.register('albums', HomePageViewSet, basename='album')
 router.register('comments', CommentModelViewSet, basename='comment')
 router.register('likedones', LikedOnesViewSet, basename='likedones')
+router.register('artists', ArtistModelViewSet, basename='myartists')
+
 
 urlpatterns = [
     path('', HomepageAPIView.as_view(), name='api'),

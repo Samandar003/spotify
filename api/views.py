@@ -33,7 +33,7 @@ from api import serializers
 
 
 class ProfileModelViewSet(ModelViewSet):
-    authentication_classes = (TokenAuthentication,)
+    # authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
@@ -69,7 +69,6 @@ class ProfileModelViewSet(ModelViewSet):
         return Response(serializer.data)
         
 class HomePageViewSet(ViewSet):
-    # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
     def list(self, request):
         songs = Song.objects.all()
@@ -82,7 +81,6 @@ class HomePageViewSet(ViewSet):
         return Response(serializer.data)
 
 class LikedOnesViewSet(ViewSet):
-    # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
     def list(self, request):
         songs = Song.objects.all()
@@ -110,9 +108,14 @@ class ArtistModelViewSet(ModelViewSet):
     serializer_class = ArtistSerializer
     queryset = Artist.objects.all()
     pagination_class = LimitOffsetPagination
+    http_method_names = ['GET']
+
+    def retrieve(self, request, *args, **kwargs):
+        artist = self.get_object()
+        songs = Song.objects.filter(artist=artist)
+        return Response(SongSerializer(songs, many=True).data)
 
 class SongModelViewSet(ModelViewSet):
-    # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
     serializer_class = SongSerializer
     pagination_class = LimitOffsetPagination
