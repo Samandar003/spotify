@@ -19,3 +19,11 @@ class IsAdminUserOrReadOnly(IsAdminUser):
         # Python3: is_admin = super().has_permission(request, view)
         return request.method in SAFE_METHODS or is_admin
 
+
+
+from rest_framework.authentication import SessionAuthentication, BaseAuthentication
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    def enforce_csrf(self, request):
+        return
+    

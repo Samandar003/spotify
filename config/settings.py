@@ -29,8 +29,16 @@ INSTALLED_APPS = [
     'music.apps.MusicConfig',
     'api.apps.ApiConfig',
     'rest_framework',
-    'rest_framework.authtoken'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'api.permissions.CsrfExemptSessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+    ],
+    }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -69,8 +77,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spotify',
-        'USER': os.environ.get('DB_USER'),
+        'NAME': 'musicdb',
+        'USER':"postgres",
         'PASSWORD': '4Yillikarmiya',
         'HOST': '127.0.0.1',
         'PORT': '5432',

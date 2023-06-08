@@ -77,7 +77,9 @@ class SongSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['id', 'song', 'text', 'replies']
+        fields = ['id', 'song', 'text', 'reply']
+        read_only_fields = ['song']
+        extra_kwargs = {"reply": {"required": False, "allow_null": True}}
 
 class MyPlaylistSerializer(serializers.ModelSerializer):
     class Meta:

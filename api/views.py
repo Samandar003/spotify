@@ -69,8 +69,8 @@ class ProfileModelViewSet(ModelViewSet):
         return Response(serializer.data)
         
 class HomePageViewSet(ViewSet):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
     def list(self, request):
         songs = Song.objects.all()
         songs = songs.order_by('listened')
@@ -82,8 +82,8 @@ class HomePageViewSet(ViewSet):
         return Response(serializer.data)
 
 class LikedOnesViewSet(ViewSet):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
     def list(self, request):
         songs = Song.objects.all()
         ids = [n.id for n in songs for m in n.likes.all() if m == self.request.user]
@@ -97,8 +97,6 @@ class LikedOnesViewSet(ViewSet):
         return Response(serializer.data)
 
 class HomepageAPIView(APIView):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
     def get(self, request, *args, **kwargs):
         myartists = MyArtist.objects.filter(author=self.request.user)
         myartist_name = [x.artist.name for x in list(myartists)]
@@ -114,14 +112,14 @@ class ArtistModelViewSet(ModelViewSet):
     pagination_class = LimitOffsetPagination
 
 class SongModelViewSet(ModelViewSet):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
     serializer_class = SongSerializer
     pagination_class = LimitOffsetPagination
     
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'artist__name']
-    # ordering_fields = ['listened', '-listened']
+    ordering_fields = ['listened', '-listened']
     # def get_queryset(self):
         # artists = MyArtist.objects.filter(author=self.request.user)
         # artist_ids = [x.artist.id for x in artists]
@@ -137,6 +135,28 @@ class SongModelViewSet(ModelViewSet):
                 similarity = TrigramSimilarity('title', query)
             ).order_by('-similarity')
         return queryset
+    
+    @action(detail=True, methods=['POST'])
+    def like(self, request, *args, **kwargs):
+        song = self.get_object()
+        if song.likes.filter(id=request.user.id).exists():
+            song.likes.remove(request.user)
+        else:
+            if song.dislikes.filter(id=request.user.id).exists():
+                song.dislikes.remove(request.user)
+            song.likes.add(request.user)
+        return Response(SongSerializer(song).data)
+
+    @action(detail=True, methods=['POST'])
+    def dislike(self, request, *args, **kwargs):
+        song = self.get_object()
+        if song.dislikes.filter(id=request.user.id).exists():
+            song.dislikes.remove(request.user)
+        else:
+            if song.likes.filter(id=request.user.id).exists():
+                song.likes.remove(request.user)
+            song.dislikes.add(request.user)
+        return Response(SongSerializer(song).data)
 
     # @action(detail=True, methods=['GET'])
     # def albums(self, request, *args, **kwargs):
@@ -163,9 +183,31 @@ class SongModelViewSet(ModelViewSet):
     @action(detail=False, methods=['GET'])
     def top_liked(self, request, *args, **kwargs):
         songs = self.get_queryset()
-        songs = songs.order_by('likes')[:10]
+        songs = songs.order_by('likes')[:2]
         serializer = SongSerializer(songs, many=True)
         return Response(serializer.data)
+    
+    @action(detail=True, methods=['POST', 'GET'])
+    def view_comments(self, request, *args, **kwargs):
+        comments = Comment.objects.all().filter(song=self.get_object())
+        return Response(CommentSerializer(comments, many=True).data)
+    
+    @action(detail=True, methods=['POST'])
+    def add_comment(self, request, *args, **kwargs):
+        serializer = CommentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        r_id = serializer.data.get('reply')
+        song_comments = Comment.objects.filter(song=self.get_object())
+        if r_id is not None:
+            reply_to = song_comments.get(id=r_id)
+            obj = Comment.objects.create(song=self.get_object(), text=serializer.data.get('text'),
+                 reply=reply_to, author=self.request.user)
+        else:
+                obj = Comment.objects.create(song=self.get_object(), text=serializer.data.get('text'),
+                author=self.request.user)
+        obj.save()
+        return Response(CommentSerializer(obj).data)
+
 
     # @action(detail=False, methods=['GET'])                               
     # def most_liked(self, request, *args, **kwargs):
@@ -179,7 +221,7 @@ class SongModelViewSet(ModelViewSet):
     #     return Response(serializer.data, status=status.HTTP_200_OK)
         
 class CommentModelViewSet(ModelViewSet):
-    authentication_classes = (TokenAuthentication,)
+    # authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly,)
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()

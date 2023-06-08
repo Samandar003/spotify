@@ -11,6 +11,7 @@ urlpatterns = [
     path('', include('music.urls')),
     path('api/', include('api.urls')),
     path('route-api', getRoutes),
+    path('user/', include('user.urls')),
 ] 
 urlpatterns += static(settings.MEDIA_URL,
                               document_root=settings.MEDIA_ROOT)
