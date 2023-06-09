@@ -8,7 +8,7 @@ import os
 
 class Artist(models.Model):
     name = models.CharField(max_length=150)
-    picture = models.ImageField(blank=True, upload_to='media/artist_pictures')
+    picture = models.ImageField(blank=True, upload_to='artist_pictures/')
 
     def __str__(self):
         return self.name
@@ -25,7 +25,7 @@ class FollowersCount(models.Model):
         return f"{self.follower} - {self.author}"
     
 class Song(models.Model):
-    audio = models.FileField(upload_to='media/audios')
+    audio = models.FileField(upload_to='audios/')
     title = models.CharField(max_length=500)
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     listened = models.ManyToManyField(User, related_name='listened', blank=True)
@@ -69,7 +69,7 @@ class MyArtist(models.Model):
 class Profile(models.Model):
     author = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=500, blank=True)
-    profileimg = models.ImageField(default="profile_pics/avatar.png", upload_to='profile_pics')
+    profileimg = models.ImageField(default="profile_pics/avatar.png", upload_to='profile_pics/')
     followers = models.ManyToManyField('Profile', related_name='follower_all', blank=True)
     
     def __str__(self):
