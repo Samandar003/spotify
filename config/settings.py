@@ -79,9 +79,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME':'musicdb',
-        'USER':'postres',
+        'USER':'dbuser',
         'PASSWORD': '4Yillikarmiya',
-        'HOST': '127.0.0.1',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
