@@ -30,7 +30,24 @@ INSTALLED_APPS = [
     'music.apps.MusicConfig',
     'api.apps.ApiConfig',
     'rest_framework',
+    'drf_yasg',
+    'corsheaders',
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    # "https://example.com",
+    "http://localhost:3000",
+    # "http://127.0.0.1:9000",
+]
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -39,11 +56,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,  
     }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -79,7 +99,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME':'musicdb',
-        'USER':'dbuser',
+        'USER':'postgres',
         'PASSWORD': '4Yillikarmiya',
         'HOST': 'localhost',
         'PORT': '5432',
