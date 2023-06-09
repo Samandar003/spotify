@@ -78,9 +78,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': str(os.getenv('DB_NAME')),
-        'USER':str(os.getenv("DB_USER")),
-        'PASSWORD': str(os.getenv("DB_PASSWORD")),
+        'NAME':'musicdb',
+        'USER':'postres',
+        'PASSWORD': '4Yillikarmiya',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
