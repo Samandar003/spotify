@@ -190,7 +190,7 @@ class SongModelViewSet(ModelViewSet):
         serializer = SongSerializer(songs, many=True)
         return Response(serializer.data)
     
-    @action(detail=True, methods=['POST', 'GET'])
+    @action(detail=True, methods=['GET'])
     def view_comments(self, request, *args, **kwargs):
         comments = Comment.objects.all().filter(song=self.get_object())
         return Response(CommentSerializer(comments, many=True).data)
