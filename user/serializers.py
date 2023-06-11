@@ -1,10 +1,19 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
-
+from .models import DownloadMyResume
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
+class ResumeSerializer(serializers.ModelSerializer):
+    file = serializers.FileField(
+        max_length=10000000,
+        allow_empty_file=False,
+        use_url=True,
+        )
+    class Meta:
+        model = DownloadMyResume
+        fields = ['file']
 
 class UserSignInSerializer(serializers.Serializer):
     username = serializers.CharField()

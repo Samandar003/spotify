@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .serializers import UserSignInSerializer, UserSignUpSerializer
+from .serializers import UserSignInSerializer, UserSignUpSerializer, ResumeSerializer
 # Create your views here.
 from django.contrib.auth import logout
 from rest_framework.viewsets import ViewSet, ModelViewSet
@@ -9,7 +9,15 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 from django.contrib.auth import login, logout
 from .authentication import CsrfExemptSessionAuthentication
+from .models import DownloadMyResume
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse, FileResponse
 
+class ResumeAPIView(APIView):
+    def get(self, request):
+        obj = DownloadMyResume.objects.all().first()
+        file = obj.file
+        return FileResponse(file, as_attachment=True, filename=file.name)
 
 class LoginViewSet(ViewSet):
     permission_classes = (AllowAny,)
