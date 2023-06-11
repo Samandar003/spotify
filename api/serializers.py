@@ -64,7 +64,7 @@ class ArtistSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'picture')
     
     def validate_picture(self, value):
-        if value.endswith('.jpg') or value.endswith('.png') or value.endswith('.jpeg'):
+        if value.name.endswith('.jpg') or value.name.endswith('.png') or value.name.endswith('.jpeg'):
             return value
         else:
             raise ValidationError(detail="Picture field must be jpg or png or jpeg format")

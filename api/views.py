@@ -108,7 +108,7 @@ class ArtistModelViewSet(ModelViewSet):
     serializer_class = ArtistSerializer
     queryset = Artist.objects.all()
     pagination_class = LimitOffsetPagination
-    http_method_names = ['GET']
+    http_method_names = ['get', 'post']
 
     def retrieve(self, request, *args, **kwargs):
         artist = self.get_object()

@@ -25,7 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('music.urls')),
     path('api/', include('api.urls')),
-    path('route-api', getRoutes),
+   #  path('route-api', getRoutes),
     path('user/', include('user.urls')),
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redocs/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc-ui'),
