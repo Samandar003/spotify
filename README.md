@@ -92,3 +92,114 @@ response:
     "dislikes": []
 }
 ```
+
+POST `localhost:8000/api/songs/1/dislike/`
+
+response:
+```
+{
+    "id": 1,
+    "audio": "/media/audios/Xamdam_Sobirov_-_Qishloqqa_qayt.mp3",
+    "title": "Qishloqdan yo'q bo'l",
+    "created_at": "2023-06-11T15:44:39.649826Z",
+    "updated_at": "2023-06-11T15:48:12.167141Z",
+    "artist": 1,
+    "listened": [],
+    "likes": [],
+    "dislikes": [1]
+}
+```
+
+POST `localhost:8000/api/songs/1/listen/`
+
+response:
+```
+{
+    "id": 1,
+    "audio": "/media/audios/Xamdam_Sobirov_-_Qishloqqa_qayt.mp3",
+    "title": "Qishloqdan yo'q bo'l",
+    "created_at": "2023-06-11T15:44:39.649826Z",
+    "updated_at": "2023-10-09T11:03:43.012804Z",
+    "artist": 1,
+    "listened": [1],
+    "likes": [],
+    "dislikes": [1]
+}
+```
+
+GET `localhost:8000/api/songs/top_listened/`
+
+response:
+```
+[
+    {
+        "id": 1,
+        "audio": "/media/audios/Xamdam_Sobirov_-_Qishloqqa_qayt.mp3",
+        "title": "Qishloqdan yo'q bo'l",
+        "created_at": "2023-06-11T15:44:39.649826Z",
+        "updated_at": "2023-10-09T11:05:41.681513Z",
+        "artist": 1,
+        "listened": [1],
+        "likes": [],
+        "dislikes": [1]
+    },
+    {
+        "id": 2,
+        "audio": "/media/audios/Xamdam_Sobirov_-_Qishloqqa_qayt_PbAPob4.mp3",
+        "title": "Kechikkan sevgim",
+        "created_at": "2023-06-11T16:26:36.408167Z",
+        "updated_at": "2023-06-11T16:26:36.408195Z",
+        "artist": 2,
+        "listened": [],
+        "likes": [],
+        "dislikes": []
+    }
+]
+```
+GET `localhost:8000/api/songs/top_liked/`
+
+response:
+```
+[
+    {
+        "id": 2,
+        "audio": "/media/audios/Xamdam_Sobirov_-_Qishloqqa_qayt_PbAPob4.mp3",
+        "title": "Kechikkan sevgim",
+        "created_at": "2023-06-11T16:26:36.408167Z",
+        "updated_at": "2023-06-11T16:26:36.408195Z",
+        "artist": 2,
+        "listened": [],
+        "likes": [],
+        "dislikes": []
+    },
+    {
+        "id": 1,
+        "audio": "/media/audios/Xamdam_Sobirov_-_Qishloqqa_qayt.mp3",
+        "title": "Qishloqdan yo'q bo'l",
+        "created_at": "2023-06-11T15:44:39.649826Z",
+        "updated_at": "2023-10-09T11:05:41.681513Z",
+        "artist": 1,
+        "listened": [1],
+        "likes": [],
+        "dislikes": [1]
+    }
+]
+```
+
+POST `localhost:8000/api/songs/1/add_comment/`
+
+body:
+```
+{
+    "text":"Good song I have ever listened to"
+}
+```
+response:
+```
+{
+    "id": 3,
+    "song": 1,
+    "text": "Good song I have ever listened to",
+    "reply": null
+}
+```
