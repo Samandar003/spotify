@@ -186,6 +186,69 @@ response:
 ]
 ```
 
+GET `localhost:8000/api/songs/?ordering=listened` - to order by not listened songs '-listened' is used
+
+response:
+```
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "audio": "http://localhost:8000/media/audios/Xamdam_Sobirov_-_Qishloqqa_qayt.mp3",
+            "title": "over the horizon",
+            "created_at": "2023-06-11T15:44:39.649826Z",
+            "updated_at": "2023-10-09T11:18:14.983323Z",
+            "artist": 1,
+            "listened": [1],
+            "likes": [],
+            "dislikes": [1]
+        },
+        {
+            "id": 2,
+            "audio": "http://localhost:8000/media/audios/Xamdam_Sobirov_-_Qishloqqa_qayt_PbAPob4.mp3",
+            "title": "Kechikkan sevgim",
+            "created_at": "2023-06-11T16:26:36.408167Z",
+            "updated_at": "2023-06-11T16:26:36.408195Z",
+            "artist": 2,
+            "listened": [],
+            "likes": [],
+            "dislikes": []
+        }
+    ]
+}
+```
+
+GET `localhost:8000/api/songs/?search=over` - pgtrigram extension is used to search by title and singer of the song
+
+response:
+```
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "audio": "http://localhost:8000/media/audios/Xamdam_Sobirov_-_Qishloqqa_qayt.mp3",
+            "title": "over the horizon",
+            "created_at": "2023-06-11T15:44:39.649826Z",
+            "updated_at": "2023-10-09T11:18:14.983323Z",
+            "artist": 1,
+            "listened": [
+                1
+            ],
+            "likes": [],
+            "dislikes": [
+                1
+            ]
+        }
+    ]
+}
+```
+
 POST `localhost:8000/api/songs/1/add_comment/`
 
 body:
@@ -231,6 +294,7 @@ response:
 ```
 
 POST `localhost:8000/api/songs/1/add_comment/`
+
 body:
 ```
 {
@@ -246,5 +310,118 @@ response:
     "song": 1,
     "text": "it is reply to another comment",
     "reply": 3
+}
+```
+
+GET `localhost:8000/api/albums/`
+
+response:
+```
+[
+    {
+        "id": 1,
+        "audio": "/media/audios/Xamdam_Sobirov_-_Qishloqqa_qayt.mp3",
+        "title": "over the horizon",
+        "created_at": "2023-06-11T15:44:39.649826Z",
+        "updated_at": "2023-10-09T11:18:14.983323Z",
+        "artist": 1,
+        "listened": [1],
+        "likes": [],
+        "dislikes": [1]
+    },
+    {
+        "id": 2,
+        "audio": "/media/audios/Xamdam_Sobirov_-_Qishloqqa_qayt_PbAPob4.mp3",
+        "title": "Kechikkan sevgim",
+        "created_at": "2023-06-11T16:26:36.408167Z",
+        "updated_at": "2023-06-11T16:26:36.408195Z",
+        "artist": 2,
+        "listened": [],
+        "likes": [],
+        "dislikes": []
+    }
+]
+```
+
+GET `localhost:8000/api/profiles/`
+
+response
+```
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 2,
+            "name": "roman",
+            "profileimg": "http://localhost:8000/media/profile_pics/avatar.png",
+            "followers": []
+        },
+        {
+            "id": 1,
+            "name": "samandar",
+            "profileimg": "http://localhost:8000/media/profile_pics/avatar.png",
+            "followers": []
+        }
+    ]
+}
+```
+
+GET `localhost:8000/api/profiles/1/followers`
+
+response:
+```
+[
+    {
+        "id": 2,
+        "name": "roman",
+        "profileimg": "/media/profile_pics/avatar.png",
+        "followers": [
+            1
+        ]
+    }
+]
+```
+
+GET `localhost:8000/api/profiles/1/followings`
+
+response:
+```
+[]     # because this user is not following anyone 
+```
+
+PATCH `localhost:8000/api/profiles/2/add_following/` - added follow anf unfollow function, if it is already following , then will be unfollowed, vice versa
+
+response:
+```
+{
+    "id": 2,
+    "name": "roman",
+    "profileimg": "/media/profile_pics/avatar.png",
+    "followers": []
+}
+```
+
+GET `localhost:8000/api/artists/`
+
+response:
+```
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "name": "Hamdam Sobirov",
+            "picture": null
+        },
+        {
+            "id": 2,
+            "name": "Mirjalol Nematov",
+            "picture": "http://localhost:8000/media/artist_pictures/men_0002.jpg"
+        }
+    ]
 }
 ```
