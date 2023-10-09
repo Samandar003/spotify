@@ -1,10 +1,8 @@
 # Api documentation
 Using Localhost
 
-POST `localhost:8000/api/songs/`
+GET `localhost:8000/api/songs/`
 
-body:
-{}
 response:
 ```
 {
