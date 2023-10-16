@@ -293,7 +293,7 @@ response:
 ]
 ```
 
-POST `localhost:8000/api/songs/1/add_comment/`
+POST `localhost:8000/api/songs/1/add_comment/` as a reply to another comment
 
 body:
 ```
