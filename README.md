@@ -1,6 +1,9 @@
 # Spotify Api documentation
 Using Localhost
 
+Prerequisities:
+`pip install django`,  `pip install djangorestframework`
+
 POST `localhost:8000/user/login/`
 
 body:
